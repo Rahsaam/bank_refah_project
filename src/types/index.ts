@@ -1,12 +1,11 @@
-export type UserRoleType = 'admin' | 'editor' | 'viewer';
-
+export type UserRoleType = "admin" | "editor" | "viewer";
 
 export interface IAuthContext {
   user: IUser | null;
   token: string | null;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
-  hasPermission: (action: 'view' | 'create' | 'edit' | 'delete') => boolean;
+  hasPermission: (action: "view" | "create" | "edit" | "delete") => boolean;
   isAuthenticated: boolean;
 }
 
@@ -17,18 +16,16 @@ export interface IUser {
   role: UserRoleType;
 }
 
-
 export interface IProduct {
   id: number;
   title: string;
   price: number;
   discount: number;
   expiryDate: string;
-  category: 'electronics' | 'clothing' | 'food' | 'home' | 'books';
+  category: "electronics" | "clothing" | "food" | "home" | "books";
   image?: string;
   description?: string;
 }
-
 
 export interface IPost {
   id: number;
@@ -36,7 +33,6 @@ export interface IPost {
   body: string;
   userId: number;
 }
-
 
 export interface IComment {
   id: number;
@@ -46,13 +42,11 @@ export interface IComment {
   postId: number;
 }
 
-
 export interface IAlbum {
   id: number;
   title: string;
   userId: number;
 }
-
 
 export interface IPhoto {
   id: number;
@@ -62,7 +56,6 @@ export interface IPhoto {
   albumId: number;
 }
 
-
 export interface ITodo {
   id: number;
   title: string;
@@ -70,8 +63,37 @@ export interface ITodo {
   userId: number;
 }
 
-
 export interface ILoginResponse {
   token: string;
   user: IUser;
+}
+
+export interface IClient {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+  website: string;
+  address: IAddress;
+  company: ICompany;
+}
+
+interface IAddress {
+  street: string;
+  suit: string;
+  city: string;
+  zipcode: string;
+  geo: IGeo;
+}
+
+interface IGeo {
+  lat: string;
+  lng: string;
+}
+
+interface ICompany {
+  name: string;
+  catchPhrase: string;
+  bs: string;
 }
