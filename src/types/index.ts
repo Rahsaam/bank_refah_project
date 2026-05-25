@@ -65,6 +65,14 @@ export interface ITodo {
   userId: number;
 }
 
+export interface IPhotos {
+  albumId: number;
+  id: number;
+  title: string;
+  url: string;
+  ththumbnailUrl: string;
+}
+
 export interface ILoginResponse {
   token: string;
   user: IUser;
@@ -129,4 +137,11 @@ export interface IFormSelectProps {
 interface Option {
   value: string;
   label: string;
+}
+
+export interface IStatsCardsProps {
+  totalProducts: number;
+  discountedProducts: number;
+  totalInventoryValue: number;
+  expiringProducts: number;
 }
