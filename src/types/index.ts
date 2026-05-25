@@ -1,3 +1,5 @@
+import type { UseFormRegister, FieldValues, Path, FieldError } from 'react-hook-form';
+
 export type UserRoleType = "admin" | "editor" | "viewer";
 
 export interface IAuthContext {
@@ -96,4 +98,35 @@ interface ICompany {
   name: string;
   catchPhrase: string;
   bs: string;
+}
+
+export interface IImageUploaderProps {
+  initialImage?: string;
+  onImageChange: (base64: string) => void;
+  error?: string;
+}
+
+export interface IFormInputProps {
+  label: string;
+  name: Path<FieldValues>; // 👈 این بخش باعث میشه فقط نام‌های معتبر فرم قبول بشن
+  register: UseFormRegister<FieldValues>; // 👈 تایپ دقیق ریجستر
+  type?: 'text' | 'number' | 'password' | 'email' | 'textarea'; // و بقیه تایپ‌ها
+  error?: FieldError;
+  required?: boolean;
+  placeholder?: string;
+}
+
+
+export interface IFormSelectProps {
+  label: string;
+  name: Path<FieldValues>; // 👈 این بخش باعث میشه فقط نام‌های معتبر فرم قبول بشن
+  register: UseFormRegister<FieldValues>; // 👈 تایپ دقیق ریجستر
+  options: Option[];
+  error?: FieldError;
+  required?: boolean;
+}
+
+interface Option {
+  value: string;
+  label: string;
 }
