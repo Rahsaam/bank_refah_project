@@ -1,0 +1,78 @@
+import { useState } from 'react';
+import { Upload, X } from 'lucide-react';
+import { validateImageFile, fileToBase64 } from '../../pages/products/productForm.config';
+import type { IImageUploaderProps } from '../../types';
+
+
+
+const ImageUploader = ({ initialImage, onImageChange, error }: IImageUploaderProps) => {
+  const [previewUrl, setPreviewUrl] = useState<string>(initialImage || '');
+  const [imageError, setImageError] = useState<string>('');
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setImageError(validationError);
+      setPreviewUrl('');
+      onImageChange('');
+      return;
+    }
+
+    setImageError('');
+    const base64 = await fileToBase64(file);
+    setPreviewUrl(base64);
+    onImageChange(base64);
+  };
+
+  const removeImage = () => {
+    setPreviewUrl('');
+    onImageChange('');
+    setImageError('');
+  };
+
+  return (
+    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+      {(error || imageError) && (
+        <p className="text-red-500 text-sm mb-2">{error || imageError}</p>
+      )}
+      
+      {previewUrl ? (
+        <div className="relative inline-block">
+          <img src={previewUrl} alt="پیش‌نمایش" className="w-32 h-32 object-cover rounded-lg" />
+          <button
+            type="button"
+            onClick={removeImage}
+            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      ) : (
+        <div className="py-4">
+          <Upload className="mx-auto text-gray-400 mb-2" size={32} />
+          <p className="text-gray-500 text-sm">برای آپلود تصویر کلیک کنید</p>
+          <p className="text-gray-400 text-xs mt-1">فرمت‌های مجاز: jpg, png, webp | حداکثر حجم: 2MB</p>
+        </div>
+      )}
+      
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onChange={handleImageChange}
+        className="hidden"
+        id="image-upload"
+      />
+      <label
+        htmlFor="image-upload"
+        className="inline-block mt-3 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-200 text-sm"
+      >
+        {previewUrl ? 'تغییر تصویر' : 'انتخاب تصویر'}
+      </label>
+    </div>
+  );
+};
+
+export default ImageUploader;
