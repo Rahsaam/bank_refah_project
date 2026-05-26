@@ -1,13 +1,31 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAlbums, deleteAlbum } from '../../api/albums';
 import { fetchPhotos, deletePhoto } from '../../api/photos';
 import GenericCRUDTable from '../common/GenericCRUDTable';
+import { useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 type SubtabType = 'albums' | 'photos';
 
-const MediaTab = () => {
-  const [activeSubtab, setActiveSubtab] = useState<SubtabType>('albums');
+interface MediaTabProps {
+  initialSubtab?: string;
+}
+
+const MediaTab = ({ initialSubtab }: MediaTabProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  console.log(searchParams);
+  
+  const activeSubtab: SubtabType = initialSubtab === 'photos' ? 'photos' : 'albums';
+
+  useEffect(() => {
+    if (!searchParams.get('subtab')) {
+      setSearchParams({
+        tab: 'media',
+        subtab: 'albums',
+      });
+    }
+  }, [searchParams, setSearchParams]);
 
   const { data: albums = [], isLoading: albumsLoading } = useQuery({
     queryKey: ['albums'],
@@ -18,6 +36,13 @@ const MediaTab = () => {
     queryKey: ['photos'],
     queryFn: fetchPhotos,
   });
+
+  const handleSubtabChange = (subtabId: SubtabType) => {
+    setSearchParams({
+      tab: 'media',
+      subtab: subtabId, 
+    });
+  };
 
   const columns = {
     albums: [
@@ -49,7 +74,7 @@ const MediaTab = () => {
         {subtabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveSubtab(tab.id as SubtabType)}
+            onClick={() => handleSubtabChange(tab.id as SubtabType)}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeSubtab === tab.id
                 ? 'text-blue-600 border-b-2 border-blue-600'

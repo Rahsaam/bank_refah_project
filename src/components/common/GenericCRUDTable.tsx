@@ -35,6 +35,10 @@ const GenericCRUDTable = ({
     return <div className="text-center p-8">در حال بارگذاری...</div>;
   }
 
+
+  console.log('data', data);
+  console.log('columns', columns);
+  
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="p-4 border-b flex justify-between items-center">
@@ -77,7 +81,7 @@ const GenericCRUDTable = ({
                   <td key={col.key} className="p-3 text-sm">
                     {col.render
                       ? col.render(item[col.key], item)
-                      : item[col.key]}
+                      : item[col.key]} 
                   </td>
                 ))}
                 <td className="p-3">

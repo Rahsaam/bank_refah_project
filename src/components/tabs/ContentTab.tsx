@@ -1,25 +1,47 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPosts, deletePost } from '../../api/posts';
 import { fetchComments, deleteComment } from '../../api/comments';
 import GenericCRUDTable from '../common/GenericCRUDTable';
+import { useEffect } from 'react';
 
 type SubtabType = 'posts' | 'comments';
 
-const ContentTab = () => {
-  const [activeSubtab, setActiveSubtab] = useState<SubtabType>('posts');
+interface ContentTabProps {
+  initialSubtab?: string;
+}
 
+const ContentTab = ({ initialSubtab }: ContentTabProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeSubtab: SubtabType = initialSubtab === 'comments' ? 'comments' : 'posts';
+
+  useEffect(() => {
+      if (!searchParams.get('subtab')) {
+        setSearchParams({
+          tab: 'content',
+          subtab: 'posts',
+        });
+      }
+    }, [searchParams, setSearchParams]);
 
   const { data: posts = [], isLoading: postsLoading } = useQuery({
     queryKey: ['posts'],
     queryFn: fetchPosts,
   });
 
-
   const { data: comments = [], isLoading: commentsLoading } = useQuery({
     queryKey: ['comments'],
     queryFn: fetchComments,
   });
+
+
+  const handleSubtabChange = (subtabId: SubtabType) => {
+    setSearchParams({
+      tab: 'content',
+      subtab: subtabId,
+    });
+  };
 
   const columns = {
     posts: [
@@ -42,12 +64,11 @@ const ContentTab = () => {
 
   return (
     <div>
-      {/* زیرتب‌ها */}
       <div className="flex gap-2 border-b mb-4">
         {subtabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveSubtab(tab.id as SubtabType)}
+            onClick={() => handleSubtabChange(tab.id as SubtabType)}
             className={`px-4 py-2 text-sm font-medium transition-colors relative ${
               activeSubtab === tab.id
                 ? 'text-blue-600 border-b-2 border-blue-600'
@@ -59,7 +80,6 @@ const ContentTab = () => {
         ))}
       </div>
 
-      {/* محتوای زیرتب فعال */}
       {activeSubtab === 'posts' && (
         <GenericCRUDTable
           title="مدیریت پست‌ها"
