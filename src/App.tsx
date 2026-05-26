@@ -1,12 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProductList, ProductDetails, ProductForm } from './pages/products';
 import Dashboard from './pages/dashboard/Dashboard'
+import TabsPage from './pages/tabs/TabsPage';
 import { useAuth } from './hooks/useAuth';
 import type { JSX } from 'react';
 
-// یک کامپوننت ساده برای صفحات در حال ساخت (بعداً با صفحات واقعی جایگزین میشه)
-const TabsPage = () => <div className="p-8 text-center">صفحه تب‌ها (در حال ساخت)</div>;
-// محافظت از مسیرها (نیازمند احراز هویت)
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -25,8 +23,8 @@ function App() {
         } />
         
         {/* مسیرهای محافظت شده */}
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         
         {/* ماژول محصولات */}
         <Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
