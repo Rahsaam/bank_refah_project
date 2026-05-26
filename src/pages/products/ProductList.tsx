@@ -85,6 +85,7 @@ const ProductList = () => {
           </select>
           <select
             value={sortBy}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onChange={(e) => setSortBy(e.target.value as any)}
             className="p-2 border rounded-lg"
           >

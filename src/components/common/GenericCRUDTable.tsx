@@ -125,7 +125,7 @@ const GenericCRUDTable = ({
             {columns.map((col) => (
               <div key={col.key} className="flex justify-between py-1">
                 <span className="text-gray-500 text-sm">{col.label}:</span>
-                <span className="text-sm">
+                <span className="text-sm text-left w-44 mr-auto">
                   {col.render ? col.render(item[col.key], item) : item[col.key]}
                 </span>
               </div>

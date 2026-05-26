@@ -5,10 +5,12 @@ import TabsPage from "./pages/tabs/TabsPage";
 import { useAuth } from "./hooks/useAuth";
 import type { JSX } from "react";
 import LoginPage from "./pages/login/LoginPage";
+import Layout from "./components/layout/Layout";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  return <Layout> {children} </Layout>;
 };
 
 function App() {
@@ -23,7 +25,6 @@ function App() {
             isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />
           }
         />
-
 
         <Route
           path="/"
@@ -41,7 +42,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
 
         <Route
           path="/products"
