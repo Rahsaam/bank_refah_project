@@ -1,4 +1,10 @@
-import type { UseFormRegister, FieldValues, Path, FieldError } from 'react-hook-form';
+
+import type {
+  UseFormRegister,
+  FieldValues,
+  Path,
+  FieldError,
+} from "react-hook-form";
 
 export type UserRoleType = "admin" | "editor" | "viewer";
 
@@ -116,19 +122,18 @@ export interface IImageUploaderProps {
 
 export interface IFormInputProps {
   label: string;
-  name: Path<FieldValues>; // 👈 این بخش باعث میشه فقط نام‌های معتبر فرم قبول بشن
-  register: UseFormRegister<FieldValues>; // 👈 تایپ دقیق ریجستر
-  type?: 'text' | 'number' | 'password' | 'email' | 'textarea'; // و بقیه تایپ‌ها
+  name: Path<FieldValues>;
+  register: UseFormRegister<FieldValues>;
+  type?: "text" | "number" | "password" | "email" | "textarea";
   error?: FieldError;
   required?: boolean;
   placeholder?: string;
 }
 
-
 export interface IFormSelectProps {
   label: string;
-  name: Path<FieldValues>; // 👈 این بخش باعث میشه فقط نام‌های معتبر فرم قبول بشن
-  register: UseFormRegister<FieldValues>; // 👈 تایپ دقیق ریجستر
+  name: Path<FieldValues>;
+  register: UseFormRegister<FieldValues>;
   options: Option[];
   error?: FieldError;
   required?: boolean;
@@ -144,4 +149,24 @@ export interface IStatsCardsProps {
   discountedProducts: number;
   totalInventoryValue: number;
   expiringProducts: number;
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface IGenericCRUDTableProps {
+  title: string;
+  data: any[];
+  columns: Column[];
+  fetchFn?: () => Promise<any[]>;
+  deleteFn: (id: number) => Promise<void>;
+  onCreate?: () => void;
+  onEdit?: (item: any) => void;
+  onView?: (item: any) => void;
+  queryKey: string;
+  isLoading?: boolean;
+}
+
+interface Column {
+  key: string;
+  label: string;
+  render?: (value: any, item: any) => React.ReactNode;
 }
