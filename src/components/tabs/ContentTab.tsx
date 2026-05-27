@@ -1,11 +1,12 @@
-import { useSearchParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { fetchPosts, deletePost } from '../../api/posts';
-import { fetchComments, deleteComment } from '../../api/comments';
-import GenericCRUDTable from '../common/GenericCRUDTable';
-import { useEffect } from 'react';
+import { useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPosts, deletePost } from "../../api/posts";
+import { fetchComments, deleteComment } from "../../api/comments";
+import GenericCRUDTable from "../common/GenericCRUDTable";
+import { useEffect, useState } from "react";
+import EditPostModal from "../common/EditPostModal";
 
-type SubtabType = 'posts' | 'comments';
+type SubtabType = "posts" | "comments";
 
 interface ContentTabProps {
   initialSubtab?: string;
@@ -13,53 +14,63 @@ interface ContentTabProps {
 
 const ContentTab = ({ initialSubtab }: ContentTabProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedPostId, setselectedPostId] = useState<number | null>(null);
 
-  const activeSubtab: SubtabType = initialSubtab === 'comments' ? 'comments' : 'posts';
+  const activeSubtab: SubtabType =
+    initialSubtab === "comments" ? "comments" : "posts";
 
   useEffect(() => {
-      if (!searchParams.get('subtab')) {
-        setSearchParams({
-          tab: 'content',
-          subtab: 'posts',
-        });
-      }
-    }, [searchParams, setSearchParams]);
+    if (!searchParams.get("subtab")) {
+      setSearchParams({
+        tab: "content",
+        subtab: "posts",
+      });
+    }
+  }, [searchParams, setSearchParams]);
 
   const { data: posts = [], isLoading: postsLoading } = useQuery({
-    queryKey: ['posts'],
+    queryKey: ["posts"],
     queryFn: fetchPosts,
   });
 
   const { data: comments = [], isLoading: commentsLoading } = useQuery({
-    queryKey: ['comments'],
+    queryKey: ["comments"],
     queryFn: fetchComments,
   });
 
-
   const handleSubtabChange = (subtabId: SubtabType) => {
     setSearchParams({
-      tab: 'content',
+      tab: "content",
       subtab: subtabId,
     });
   };
 
   const columns = {
     posts: [
-      { key: 'id', label: 'ID' },
-      { key: 'title', label: 'عنوان' },
-      { key: 'body', label: 'محتوا', render: (value: string) => value.substring(0, 50) + '...' },
+      { key: "id", label: "ID" },
+      { key: "title", label: "عنوان" },
+      {
+        key: "body",
+        label: "محتوا",
+        render: (value: string) => value.substring(0, 50) + "...",
+      },
     ],
     comments: [
-      { key: 'id', label: 'ID' },
-      { key: 'name', label: 'نام' },
-      { key: 'email', label: 'ایمیل' },
-      { key: 'body', label: 'متن', render: (value: string) => value.substring(0, 50) + '...' },
+      { key: "id", label: "ID" },
+      { key: "name", label: "نام" },
+      { key: "email", label: "ایمیل" },
+      {
+        key: "body",
+        label: "متن",
+        render: (value: string) => value.substring(0, 50) + "...",
+      },
     ],
   };
 
   const subtabs = [
-    { id: 'posts', label: 'پست‌ها' },
-    { id: 'comments', label: 'کامنت‌ها' },
+    { id: "posts", label: "پست‌ها" },
+    { id: "comments", label: "کامنت‌ها" },
   ];
 
   return (
@@ -71,8 +82,8 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
             onClick={() => handleSubtabChange(tab.id as SubtabType)}
             className={`px-4 py-2 text-sm font-medium transition-colors relative ${
               activeSubtab === tab.id
-                ? 'text-blue-600 border-b-2 border-blue-600'
-                : 'text-gray-500 hover:text-gray-700'
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500 hover:text-gray-700"
             }`}
           >
             {tab.label}
@@ -80,7 +91,7 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
         ))}
       </div>
 
-      {activeSubtab === 'posts' && (
+      {activeSubtab === "posts" && (
         <GenericCRUDTable
           title="مدیریت پست‌ها"
           data={posts}
@@ -89,12 +100,15 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           queryKey="posts"
           isLoading={postsLoading}
           onView={(post) => alert(`پست: ${post.title}\n${post.body}`)}
-          onEdit={(post) => alert(`ویرایش پست ${post.id} (در حال توسعه)`)}
-          onCreate={() => alert('افزودن پست جدید (در حال توسعه)')}
+          onEdit={(post) => {
+            setIsEditModalOpen(true);
+            setselectedPostId(post.id);
+          }}
+          onCreate={() => alert("افزودن پست جدید (در حال توسعه)")}
         />
       )}
 
-      {activeSubtab === 'comments' && (
+      {activeSubtab === "comments" && (
         <GenericCRUDTable
           title="مدیریت کامنت‌ها"
           data={comments}
@@ -103,8 +117,21 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           queryKey="comments"
           isLoading={commentsLoading}
           onView={(comment) => alert(`کامنت: ${comment.name}\n${comment.body}`)}
-          onEdit={(comment) => alert(`ویرایش کامنت ${comment.id} (در حال توسعه)`)}
-          onCreate={() => alert('افزودن کامنت جدید (در حال توسعه)')}
+          onEdit={(comment) =>
+            alert(`ویرایش کامنت ${comment.id} (در حال توسعه)`)
+          }
+          onCreate={() => alert("افزودن کامنت جدید (در حال توسعه)")}
+        />
+      )}
+
+
+      {isEditModalOpen && selectedPostId !== null && (
+        <EditPostModal
+          postId={selectedPostId}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setselectedPostId(null);
+          }}
         />
       )}
     </div>
