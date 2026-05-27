@@ -136,7 +136,7 @@ const GenericCRUDTable = ({
                   onClick={() => onView(item)}
                   className="text-blue-500 text-sm"
                 >
-                  جزئیات
+                  <Eye size={18} />
                 </button>
               )}
               {hasPermission("edit") && onEdit && (
@@ -144,7 +144,7 @@ const GenericCRUDTable = ({
                   onClick={() => onEdit(item)}
                   className="text-yellow-500 text-sm"
                 >
-                  ویرایش
+                  <Pencil size={18} />
                 </button>
               )}
               {hasPermission("delete") && (
@@ -152,7 +152,7 @@ const GenericCRUDTable = ({
                   onClick={() => handleDelete(item.id)}
                   className="text-red-500 text-sm"
                 >
-                  حذف
+                  <Trash2 size={18} />
                 </button>
               )}
             </div>

@@ -6,6 +6,7 @@ import { useAuth } from "./hooks/useAuth";
 import type { JSX } from "react";
 import LoginPage from "./pages/login/LoginPage";
 import Layout from "./components/layout/Layout";
+import EditProductWrapper from "./components/common/EditProductWrapper";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -71,7 +72,7 @@ function App() {
           path="/products/:id/edit"
           element={
             <ProtectedRoute>
-              <ProductForm isEditMode />
+              <EditProductWrapper />
             </ProtectedRoute>
           }
         />

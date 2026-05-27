@@ -32,7 +32,8 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
   } = useForm<ProductFormData>({
     // @ts-expect-error یا مطمئن شو که در productSchema فیلد image تعریف شده است
     resolver: yupResolver(productSchema),
-    defaultValues: initialData || {
+    values: initialData,
+    defaultValues: {
       title: "",
       price: 0,
       discount: 0,
