@@ -1,4 +1,3 @@
-
 import type {
   UseFormRegister,
   FieldValues,
@@ -36,18 +35,18 @@ export interface IProduct {
 }
 
 export interface IPost {
-  id: number;
+  id?: number;
   title: string;
   body: string;
   userId?: number;
 }
 
 export interface IComment {
-  id: number;
+  id?: number;
   name: string;
   email: string;
   body: string;
-  postId: number;
+  postId?: number;
 }
 
 export interface IAlbum {
@@ -163,6 +162,8 @@ export interface IGenericCRUDTableProps {
   onView?: (item: any) => void;
   queryKey: string;
   isLoading?: boolean;
+  hideCreateButton?: boolean;
+  customCreateButton?: React.ReactNode;
 }
 
 interface Column {

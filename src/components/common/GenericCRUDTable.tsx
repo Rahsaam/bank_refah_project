@@ -14,6 +14,8 @@ const GenericCRUDTable = ({
   onView,
   queryKey,
   isLoading,
+   hideCreateButton = false,
+   customCreateButton, 
 }: IGenericCRUDTableProps) => {
   const { hasPermission } = useAuth();
   const queryClient = useQueryClient();
@@ -42,8 +44,9 @@ const GenericCRUDTable = ({
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="p-4 border-b flex justify-between items-center">
-        <h3 className="text-lg font-bold">{title}</h3>
-        {hasPermission("create") && onCreate && (
+         <h3 className="text-lg font-bold">{title}</h3>
+        {/* اگه hideCreateButton true باشه، دکمه پیش‌فرض نمایش داده نمیشه */}
+        {!hideCreateButton && hasPermission("create") && onCreate && (
           <button
             onClick={onCreate}
             className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
@@ -51,6 +54,8 @@ const GenericCRUDTable = ({
             <Plus size={16} /> افزودن جدید
           </button>
         )}
+        {/* دکمه سفارشی (برای مواردی که میخوایم مودال مخصوص خودش رو داشته باشه) */}
+        {customCreateButton}
       </div>
 
       {/* نمایش جدول در دسکتاپ */}

@@ -4,8 +4,9 @@ import { fetchPosts, deletePost } from "../../api/posts";
 import { fetchComments, deleteComment } from "../../api/comments";
 import GenericCRUDTable from "../common/GenericCRUDTable";
 import { useEffect, useState } from "react";
-import EditPostModal from "../common/EditPostModal";
-import EditCommentModal from "../common/EditCommentModal";
+import PostFormModal from "../common/PostFormModal";
+import { Plus } from "lucide-react";
+import CommentFormModal from "../common/CommentFormModal";
 
 type SubtabType = "posts" | "comments";
 
@@ -15,13 +16,15 @@ interface ContentTabProps {
 
 const ContentTab = ({ initialSubtab }: ContentTabProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedPostId, setselectedPostId] = useState<number | null>(null);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-  const [selectedCommentId, setselectedCommentId] = useState<number | null>(
-    null,
-  );
+  const [selectedCommentId, setselectedCommentId] = useState<number | null>(null);
+  const [isCreateCommentModalOpen, setCreateIsCommentModalOpen] =useState(false);
+  const [isCreatePostModalOpen, setCreateIsPostModalOpen] = useState(false);
 
+  console.log(isCreateCommentModalOpen, isCreatePostModalOpen);
+  
   const activeSubtab: SubtabType =
     initialSubtab === "comments" ? "comments" : "posts";
 
@@ -106,10 +109,25 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           isLoading={postsLoading}
           onView={(post) => alert(`پست: ${post.title}\n${post.body}`)}
           onEdit={(post) => {
-            setIsEditModalOpen(true);
-            setselectedPostId(post.id);
+            setIsPostModalOpen(true);
+            setSelectedPostId(post.id);
           }}
-          onCreate={() => alert("افزودن پست جدید (در حال توسعه)")}
+          onCreate={() => {
+            setCreateIsPostModalOpen(true);
+            setSelectedPostId(null);
+          }}
+          hideCreateButton={true}
+          customCreateButton={
+            <button
+              onClick={() => {
+                setSelectedPostId(null);
+                setIsPostModalOpen(true);
+              }}
+              className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
+            >
+              <Plus size={16} /> افزودن پست جدید
+            </button>
+          }
         />
       )}
 
@@ -126,22 +144,37 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
             setIsCommentModalOpen(true);
             setselectedCommentId(comment.id);
           }}
-          onCreate={() => alert("افزودن کامنت جدید (در حال توسعه)")}
+          onCreate={() => {
+            setCreateIsCommentModalOpen(true);
+            setselectedCommentId(null);
+          }}
+          hideCreateButton={true}
+          customCreateButton={
+            <button
+              onClick={() => {
+                setselectedCommentId(null);
+                setIsCommentModalOpen(true);
+              }}
+              className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
+            >
+              <Plus size={16} /> افزودن کامنت جدید
+            </button>
+          }
         />
       )}
 
-      {isEditModalOpen && selectedPostId !== null && (
-        <EditPostModal
+      {isPostModalOpen && (
+        <PostFormModal
           postId={selectedPostId}
           onClose={() => {
-            setIsEditModalOpen(false);
-            setselectedPostId(null);
+            setIsPostModalOpen(false);
+            setSelectedPostId(null);
           }}
         />
       )}
 
-      {isCommentModalOpen && selectedCommentId !== null && (
-        <EditCommentModal
+      {isCommentModalOpen && (
+        <CommentFormModal
           commentId={selectedCommentId}
           onClose={() => {
             setIsCommentModalOpen(false);
