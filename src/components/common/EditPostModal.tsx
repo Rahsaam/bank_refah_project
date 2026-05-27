@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { fetchPostById, updatePost } from "../../api/posts";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface EditPostModalProps {
   postId: number;
@@ -11,6 +13,13 @@ interface PostFormData {
   title: string;
   body: string;
 }
+
+const postModalSchema = yup.object({
+  title: yup.string().required("وارد کردن عنوان الزامی است"),
+  body: yup
+    .string()
+    .required("وارد کردن محتوا الزامی است"),
+});
 
 const EditPostModal = ({ postId, onClose }: EditPostModalProps) => {
   const queryClient = useQueryClient();
@@ -28,7 +37,8 @@ const EditPostModal = ({ postId, onClose }: EditPostModalProps) => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<PostFormData>({
-    values: post ? { title: post.title, body: post.body } : undefined
+    values: post ? { title: post.title, body: post.body } : undefined,
+    resolver: yupResolver(postModalSchema),
   });
 
 //   useEffect(() => {
@@ -85,7 +95,7 @@ const EditPostModal = ({ postId, onClose }: EditPostModalProps) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">عنوان پست</label>
             <input
               type="text"
-              {...register("title", { required: "وارد کردن عنوان الزامی است" })}
+              {...register("title")}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
             {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
@@ -95,7 +105,7 @@ const EditPostModal = ({ postId, onClose }: EditPostModalProps) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">محتوای پست</label>
             <textarea
               rows={5}
-              {...register("body", { required: "وارد کردن محتوا الزامی است" })}
+              {...register("body")}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
             {errors.body && <p className="text-red-500 text-xs mt-1">{errors.body.message}</p>}

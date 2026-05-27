@@ -5,6 +5,7 @@ import { fetchComments, deleteComment } from "../../api/comments";
 import GenericCRUDTable from "../common/GenericCRUDTable";
 import { useEffect, useState } from "react";
 import EditPostModal from "../common/EditPostModal";
+import EditCommentModal from "../common/EditCommentModal";
 
 type SubtabType = "posts" | "comments";
 
@@ -16,6 +17,10 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPostId, setselectedPostId] = useState<number | null>(null);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [selectedCommentId, setselectedCommentId] = useState<number | null>(
+    null,
+  );
 
   const activeSubtab: SubtabType =
     initialSubtab === "comments" ? "comments" : "posts";
@@ -117,13 +122,13 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           queryKey="comments"
           isLoading={commentsLoading}
           onView={(comment) => alert(`کامنت: ${comment.name}\n${comment.body}`)}
-          onEdit={(comment) =>
-            alert(`ویرایش کامنت ${comment.id} (در حال توسعه)`)
-          }
+          onEdit={(comment) => {
+            setIsCommentModalOpen(true);
+            setselectedCommentId(comment.id);
+          }}
           onCreate={() => alert("افزودن کامنت جدید (در حال توسعه)")}
         />
       )}
-
 
       {isEditModalOpen && selectedPostId !== null && (
         <EditPostModal
@@ -131,6 +136,16 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           onClose={() => {
             setIsEditModalOpen(false);
             setselectedPostId(null);
+          }}
+        />
+      )}
+
+      {isCommentModalOpen && selectedCommentId !== null && (
+        <EditCommentModal
+          commentId={selectedCommentId}
+          onClose={() => {
+            setIsCommentModalOpen(false);
+            setselectedCommentId(null);
           }}
         />
       )}
