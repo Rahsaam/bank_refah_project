@@ -64,7 +64,7 @@ export interface IPhoto {
 }
 
 export interface ITodo {
-  id: number;
+  id?: number;
   title: string;
   completed: boolean;
   userId: number;
@@ -76,14 +76,14 @@ export interface ILoginResponse {
 }
 
 export interface IClient {
-  id: number;
+  id?: number;
   name: string;
   username: string;
   email: string;
   phone: string;
   website: string;
-  address: IAddress;
-  company: ICompany;
+  address?: IAddress;
+  company?: ICompany;
 }
 
 interface IAddress {

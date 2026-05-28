@@ -123,7 +123,7 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
                 setSelectedPostId(null);
                 setIsPostModalOpen(true);
               }}
-              className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
+              className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن پست جدید
             </button>
@@ -155,7 +155,7 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
                 setselectedCommentId(null);
                 setIsCommentModalOpen(true);
               }}
-              className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
+              className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن کامنت جدید
             </button>

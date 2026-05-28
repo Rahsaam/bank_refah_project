@@ -68,12 +68,12 @@ const PostFormModal = ({ postId, onClose }: PostFormModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0 md:p-4"
       dir="rtl"
     >
       <div className="absolute inset-0" onClick={onClose}></div>
 
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 relative z-10">
+      <div className="bg-white rounded-none md:rounded-lg shadow-xl w-full h-full md:h-auto md:max-w-lg md:p-6 p-4 relative z-10 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">
           {isEditMode ? "ویرایش پست" : "ایجاد پست جدید"}
         </h2>

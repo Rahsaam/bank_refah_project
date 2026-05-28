@@ -121,7 +121,7 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
                 setSelectedAlbumId(null);
                 setIsAlbumModalOpen(true);
               }}
-              className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
+              className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن آلبوم جدید
             </button>
@@ -152,7 +152,7 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
                 setSelectedPhotoId(null);
                 setIsPhotoModalOpen(true);
               }}
-              className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600"
+              className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن عکس جدید
             </button>
