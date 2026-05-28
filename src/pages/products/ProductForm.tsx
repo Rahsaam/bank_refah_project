@@ -74,7 +74,7 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
               label="نام محصول"
               name="title"
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              register={register as any} // موقت
+              register={register as any}
               error={errors.title}
               required
             />

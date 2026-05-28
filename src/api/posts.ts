@@ -3,7 +3,7 @@ import axiosInstance from '../services/axios';
 import type { IPost } from '../types/index';
 
 export const fetchPosts = async (): Promise<IPost[]> => {
-  const { data } = await axiosInstance.get('/posts?limit=10');
+  const { data } = await axiosInstance.get('/posts');
   return data;
 };
 

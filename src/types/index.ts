@@ -50,13 +50,13 @@ export interface IComment {
 }
 
 export interface IAlbum {
-  id: number;
+  id?: number;
   title: string;
   userId: number;
 }
 
 export interface IPhoto {
-  id: number;
+  id?: number;
   title: string;
   url: string;
   thumbnailUrl: string;
@@ -68,14 +68,6 @@ export interface ITodo {
   title: string;
   completed: boolean;
   userId: number;
-}
-
-export interface IPhotos {
-  albumId: number;
-  id: number;
-  title: string;
-  url: string;
-  ththumbnailUrl: string;
 }
 
 export interface ILoginResponse {

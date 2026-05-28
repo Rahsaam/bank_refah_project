@@ -4,9 +4,9 @@ import { fetchPosts, deletePost } from "../../api/posts";
 import { fetchComments, deleteComment } from "../../api/comments";
 import GenericCRUDTable from "../common/GenericCRUDTable";
 import { useEffect, useState } from "react";
-import PostFormModal from "../common/PostFormModal";
+import PostFormModal from "../modals/PostFormModal";
 import { Plus } from "lucide-react";
-import CommentFormModal from "../common/CommentFormModal";
+import CommentFormModal from "../modals/CommentFormModal";
 
 type SubtabType = "posts" | "comments";
 
