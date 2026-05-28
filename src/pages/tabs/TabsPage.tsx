@@ -42,8 +42,8 @@ const TabsPage = () => {
         </h1>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="border-b">
-            <div className="flex overflow-x-auto hide-scrollbar">
+          <div className="border-b overflow-x-auto">
+            <div className="flex min-w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}

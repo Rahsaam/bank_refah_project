@@ -7,7 +7,7 @@ const AdminWidget = ({
   isLoading,
   error,
 }: {
-  productCount: number;
+  productCount: string;
   hasCreatePermission: boolean;
   isLoading: boolean;
   error: unknown;

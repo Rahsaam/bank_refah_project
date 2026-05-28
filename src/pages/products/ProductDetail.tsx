@@ -3,12 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import { fetchProductById } from '../../api/products';
 import { ArrowLeft, Pencil } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import { persianCategory } from '../../utils/persianCategory';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { hasPermission } = useAuth();
   const { data: product, isLoading } = useQuery({
-    queryKey: ['product', id],
+    queryKey: ['products', id],
     queryFn: () => fetchProductById(Number(id)),
   });
 
@@ -33,12 +34,12 @@ const ProductDetails = () => {
             <p className="text-gray-600 mb-4">{product.description}</p>
             
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div><span className="font-bold">دسته‌بندی:</span> {product.category}</div>
-              <div><span className="font-bold">قیمت اصلی:</span> {product.price.toLocaleString()} تومان</div>
+              <div><span className="font-bold">دسته‌بندی:</span> {persianCategory(product.category)}</div>
+              <div><span className="font-bold">قیمت اصلی:</span> {product.price.toLocaleString('fa-IR')} تومان</div>
               {product.discount > 0 && (
                 <>
-                  <div><span className="font-bold">تخفیف:</span> {product.discount}%</div>
-                  <div><span className="font-bold text-green-600">قیمت نهایی:</span> {finalPrice.toLocaleString()} تومان</div>
+                  <div><span className="font-bold">تخفیف:</span> {product.discount.toLocaleString('fa-IR')}%</div>
+                  <div><span className="font-bold text-green-600">قیمت نهایی:</span> {finalPrice.toLocaleString('fa-IR')} تومان</div>
                 </>
               )}
               <div><span className="font-bold">تاریخ انقضا:</span> {product.expiryDate}</div>

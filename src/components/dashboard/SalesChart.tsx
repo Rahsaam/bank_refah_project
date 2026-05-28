@@ -11,7 +11,7 @@ const salesData = [
 ];
 
 const formatPrice = (value: number) => {
-  return `${(value / 1000000).toLocaleString()}M`;
+  return `${(value / 1000000).toLocaleString('fa-IR')}M`;
 };
 
 const SalesChart = () => {
@@ -23,7 +23,7 @@ const SalesChart = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />
           <YAxis tickFormatter={formatPrice} width="auto" style={{ direction: 'ltr' }} />
-          <Tooltip formatter={(value: number) => `${(value / 1000000).toLocaleString()} میلیون تومان`} />
+          <Tooltip formatter={(value: number) => `${(value / 1000000).toLocaleString('fa-IR')} میلیون تومان`} />
           <Legend />
           <Bar dataKey="sales" fill="#3b82f6" name="فروش (تومان)" />
         </BarChart>

@@ -59,7 +59,7 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
   });
 
 
-  const onSubmit = (data: ProductFormData) => mutation.mutate(data);
+  const onSubmit = (data: IProduct) => mutation.mutate(data);
 
   return (
     <div className="max-w-3xl mx-auto p-4" dir="rtl">

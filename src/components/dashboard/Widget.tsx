@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Widget = ({ title, value, icon: Icon, linkTo, linkText, color, isLoading, error }: {
   title: string;
-  value: number;
+  value: number | string;
   icon: React.ElementType;
   linkTo: string;
   linkText: string;

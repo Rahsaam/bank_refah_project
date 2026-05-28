@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Widget from "./Widget";
 import AdminWidget from "./AdminWidget";
 import { fetchUsers } from "../../api/users";
+import { formatPrice } from "../../utils/formatPrice";
 
 const QuickAccessWidgets = () => {
   const { hasPermission } = useAuth();
@@ -38,6 +39,9 @@ const QuickAccessWidgets = () => {
     queryFn: fetchComments,
   });
 
+  console.log(comments);
+  
+
 
   const {
     data: albums = [],
@@ -58,13 +62,15 @@ const QuickAccessWidgets = () => {
     queryFn: fetchUsers,
   });
 
+  console.log(photos);
+  
   // دسترسی افزودن محصول (Admin یا Editor)
   const canCreateProduct = hasPermission("create");
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <AdminWidget
-        productCount={products.length}
+        productCount={formatPrice(products.length)}
         hasCreatePermission={canCreateProduct}
         isLoading={isLoading}
         error={error}
@@ -72,7 +78,7 @@ const QuickAccessWidgets = () => {
 
       <Widget
         title="کاربران"
-        value={10}
+        value={formatPrice(10)}
         icon={Users}
         linkTo="/tabs?tab=management&subtab=users"
         isLoading={usersLoading}
@@ -83,7 +89,7 @@ const QuickAccessWidgets = () => {
 
       <Widget
         title="محتوا"
-        value={posts.length + comments.length}
+        value={formatPrice(posts.length)}
         icon={MessageSquare}
         linkTo="/tabs?tab=content&subtab=posts"
         isLoading={postsLoading}
@@ -94,7 +100,7 @@ const QuickAccessWidgets = () => {
 
       <Widget
         title="رسانه"
-        value={albums.length + photos.length}
+        value={formatPrice(albums.length)}
         icon={Image}
         linkTo="/tabs?tab=media&subtab=photos"
         isLoading={albumsLoading}

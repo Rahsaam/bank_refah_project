@@ -1,10 +1,6 @@
 import { Package, Percent, Banknote, CalendarClock } from 'lucide-react';
 import type { IStatsCardsProps } from '../../types';
-
-
-const formatPrice = (price: number) => {
-  return price.toLocaleString('fa-IR');
-};
+import { formatPrice } from '../../utils/formatPrice';
 
 const StatsCards = ({
   totalProducts,
@@ -50,7 +46,7 @@ const StatsCards = ({
           <div>
             <p className="text-gray-500 text-sm mb-1">{card.title}</p>
             <p className="text-2xl font-bold">
-              {card.format === 'price' ? `${formatPrice(card.value)} تومان` : card.value}
+              {card.format === 'price' ? `${formatPrice(card.value)} تومان` : formatPrice(card.value)}
             </p>
           </div>
           <div className={`${card.color} p-3 rounded-full text-white`}>
