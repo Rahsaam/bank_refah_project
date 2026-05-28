@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // داده‌های شبیه‌سازی شده برای فروش ۶ ماه اخیر
@@ -23,7 +24,7 @@ const SalesChart = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />
           <YAxis tickFormatter={formatPrice} width="auto" style={{ direction: 'ltr' }} />
-          <Tooltip formatter={(value: number) => `${(value / 1000000).toLocaleString('fa-IR')} میلیون تومان`} />
+          <Tooltip formatter={(value: any) => `${(value / 1000000).toLocaleString('fa-IR')} میلیون تومان`} />
           <Legend />
           <Bar dataKey="sales" fill="#3b82f6" name="فروش (تومان)" />
         </BarChart>
