@@ -171,7 +171,7 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
     <div className="relative w-full" dir="rtl" ref={wrapperRef}>
      <p className='text-gray-700 mb-2'>تاریخ انقضا *</p>
       <div
-        className={`w-full p-2.5 border rounded-lg cursor-pointer bg-white flex items-center justify-between select-none transition-colors ${
+        className={`w-full p-2 border rounded-lg cursor-pointer bg-white flex items-center justify-between select-none transition-colors ${
           error ? 'border-red-500 bg-red-50/10' : 'border-gray-300 hover:border-gray-400'
         }`}
         onClick={() => setIsOpen(!isOpen)}
