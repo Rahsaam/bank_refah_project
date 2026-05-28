@@ -1,5 +1,5 @@
 
-import { useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -59,7 +59,8 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
   });
 
 
-  const onSubmit = (data: IProduct) => mutation.mutate(data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit: SubmitHandler<any> = (data: IProduct) => mutation.mutate(data);
 
   return (
     <div className="max-w-3xl mx-auto p-4" dir="rtl">
@@ -96,7 +97,7 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
               error={errors.discount}
             />
 
-            <div className="md:col-span-2">
+            {/* <div className="md:col-span-2"> */}
               <PersianDatePicker
                 value={expiryDateValue || ""}
                 onChange={(date) =>
@@ -105,7 +106,7 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
                 error={errors.expiryDate?.message}
                 placeholder="مثال: ۱۴۰۳/۱۲/۲۵"
               />
-            </div>
+            {/* </div> */}
 
             <FormSelect
               label="دسته‌بندی"
