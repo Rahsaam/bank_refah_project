@@ -6,23 +6,36 @@ import type { IImageUploaderProps } from '../../types';
 const ImageUploader = ({ initialImage, onImageChange, error }: IImageUploaderProps) => {
   const [previewUrl, setPreviewUrl] = useState<string>(initialImage || '');
   const [imageError, setImageError] = useState<string>('');
+  const [isConverting, setIsConverting] = useState<boolean>(false);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const validationError = validateImageFile(file);
-    if (validationError) {
-      setImageError(validationError);
+    setIsConverting(true);
+    
+    try {
+      const result = await validateImageFile(file);
+      
+      if (!result.isValid || result.error) {
+        setImageError(result.error || 'فرمت فایل نامعتبر است');
+        setPreviewUrl('');
+        onImageChange('');
+        setIsConverting(false);
+        return;
+      }
+
+      setImageError('');
+      const base64 = await fileToBase64(result.processedFile);
+      setPreviewUrl(base64);
+      onImageChange(base64);
+    } catch {
+      setImageError('خطا در پردازش تصویر');
       setPreviewUrl('');
       onImageChange('');
-      return;
+    } finally {
+      setIsConverting(false);
     }
-
-    setImageError('');
-    const base64 = await fileToBase64(file);
-    setPreviewUrl(base64);
-    onImageChange(base64);
   };
 
   const removeImage = () => {
@@ -35,6 +48,12 @@ const ImageUploader = ({ initialImage, onImageChange, error }: IImageUploaderPro
     <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
       {(error || imageError) && (
         <p className="text-red-500 text-sm mb-2">{error || imageError}</p>
+      )}
+      
+      {isConverting && (
+        <div className="text-blue-500 text-sm mb-2">
+          در حال تبدیل تصویر...
+        </div>
       )}
       
       {previewUrl ? (
@@ -62,10 +81,13 @@ const ImageUploader = ({ initialImage, onImageChange, error }: IImageUploaderPro
         onChange={handleImageChange}
         className="hidden"
         id="image-upload"
+        disabled={isConverting}
       />
       <label
         htmlFor="image-upload"
-        className="inline-block mt-3 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-200 text-sm"
+        className={`inline-block mt-3 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-200 text-sm ${
+          isConverting ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
         {previewUrl ? 'تغییر تصویر' : 'انتخاب تصویر'}
       </label>
