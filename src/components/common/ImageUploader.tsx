@@ -3,8 +3,6 @@ import { Upload, X } from 'lucide-react';
 import { validateImageFile, fileToBase64 } from '../../pages/products/productForm.config';
 import type { IImageUploaderProps } from '../../types';
 
-
-
 const ImageUploader = ({ initialImage, onImageChange, error }: IImageUploaderProps) => {
   const [previewUrl, setPreviewUrl] = useState<string>(initialImage || '');
   const [imageError, setImageError] = useState<string>('');
@@ -54,13 +52,13 @@ const ImageUploader = ({ initialImage, onImageChange, error }: IImageUploaderPro
         <div className="py-4">
           <Upload className="mx-auto text-gray-400 mb-2" size={32} />
           <p className="text-gray-500 text-sm">برای آپلود تصویر کلیک کنید</p>
-          <p className="text-gray-400 text-xs mt-1">فرمت‌های مجاز: jpg, png, webp | حداکثر حجم: 2MB</p>
+          <p className="text-gray-400 text-xs mt-1">فرمت‌های مجاز: jpg, png, webp, heic, heif | حداکثر حجم: 2MB</p>
         </div>
       )}
       
       <input
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
         onChange={handleImageChange}
         className="hidden"
         id="image-upload"
