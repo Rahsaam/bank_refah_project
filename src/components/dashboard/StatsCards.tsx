@@ -31,7 +31,7 @@ const StatsCards = ({
       format: 'price',
     },
     {
-      title: 'محصولات نزدیک به انقضا',
+      title: 'محصولات منقضی شده',
       value: expiringProducts,
       icon: CalendarClock,
       color: 'bg-red-500',

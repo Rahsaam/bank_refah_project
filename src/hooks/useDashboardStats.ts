@@ -18,14 +18,19 @@ export const useDashboardStats = () => {
     return sum + finalPrice;
   }, 0);
 
+  const expiringProducts = products.filter(p => {
+  if (!p.expiryDate) return false;
+  
+  const expiryDate = new Date(p.expiryDate);
   const today = new Date();
   
-  // محصولات منقضی شده یا نزدیک به انقضا (کمتر از 30 روز مونده)
-  const expiringProducts = products.filter(p => {
-    const expiryDate = new Date(p.expiryDate);
-    const daysUntilExpiry = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
-    return daysUntilExpiry <= 30 && daysUntilExpiry >= 0;
-  }).length;
+  today.setHours(0, 0, 0, 0);
+  expiryDate.setHours(0, 0, 0, 0);
+  
+  return expiryDate < today;
+}).length;
+
+  
 
   return {
     totalProducts,
