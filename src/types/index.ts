@@ -163,3 +163,10 @@ interface Column {
   label: string;
   render?: (value: any, item: any) => React.ReactNode;
 }
+
+export interface IImageWithFallbackProps {
+  src: string | undefined;
+  alt: string;
+  className?: string;
+  fallbackSrc?: string;
+}

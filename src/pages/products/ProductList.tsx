@@ -5,6 +5,7 @@ import { fetchProducts, deleteProduct } from "../../api/products";
 import { Pencil, Trash2, Eye, Plus, Search } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { persianCategory } from "../../utils/persianCategory";
+import ImageWithFallback from "../../components/common/ImageWithFallback";
 
 const ProductList = () => {
   const { hasPermission } = useAuth();
@@ -123,7 +124,7 @@ console.log('sortedProducts', sortedProducts);
             {sortedProducts.map((product) => (
               <tr key={product.id} className="border-b hover:bg-gray-50">
                 <td className="p-3">
-                  <img
+                  <ImageWithFallback
                     src={product.image}
                     alt={product.title}
                     className="w-12 h-12 object-cover rounded"

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import AlbumFormModal from "../modals/AlbumFormModal";
 import PhotoFormModal from "../modals/PhotoFormModal";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 type SubtabType = "albums" | "photos";
 
@@ -45,6 +46,10 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
     queryFn: fetchPhotos,
   });
 
+  console.log('fetch albums', albums);
+  console.log('fetch photos', photos);
+  
+
   const handleSubtabChange = (subtabId: SubtabType) => {
     setSearchParams({
       tab: "media",
@@ -65,7 +70,12 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
         key: "thumbnailUrl",
         label: "تصویر",
         render: (value: string) => (
-          <img
+          // <img
+          //   src={value}
+          //   alt="thumbnail"
+          //   className="w-8 h-8 rounded object-cover"
+          // />
+          <ImageWithFallback
             src={value}
             alt="thumbnail"
             className="w-8 h-8 rounded object-cover"
