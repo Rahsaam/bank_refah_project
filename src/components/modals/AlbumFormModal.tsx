@@ -5,6 +5,7 @@ import { fetchAlbumById, createAlbum, updateAlbum } from "../../api/albums";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { IAlbum } from "../../types";
+import toast from "react-hot-toast";
 
 interface AlbumFormModalProps {
   albumId?: number | null;
@@ -52,9 +53,13 @@ const AlbumFormModal = ({ albumId, onClose }: AlbumFormModalProps) => {
       return createAlbum(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["albums"] });
-      onClose();
-    },
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+    toast.success(isEditMode ? 'آلبوم با موفقیت ویرایش شد' : 'آلبوم با موفقیت ایجاد شد');
+    onClose();
+  },
+  onError: () => {
+    toast.error('خطا در ذخیره آلبوم');
+  },
   });
 
   const onSubmit = (data: IAlbum) => {

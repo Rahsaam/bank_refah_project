@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { LogIn, User, Lock } from "lucide-react";
+import toast from "react-hot-toast";
 
 const loginSchema = yup.object({
   username: yup.string().required("نام کاربری الزامی است"),
@@ -29,15 +30,20 @@ const LoginPage = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    setError("");
-    const success = await login(data.username, data.password);
-    if (success) {
-      navigate("/dashboard");
-    } else {
-      setError("نام کاربری یا رمز عبور اشتباه است");
-    }
-  };
+ 
+const onSubmit = async (data: LoginFormData) => {
+  setError('');
+  const success = await login(data.username, data.password);
+  if (success) {
+    toast.success(`خوش آمدید ${data.username}`, {
+      icon: '👋',
+      duration: 2000,
+    });
+    navigate('/dashboard');
+  } else {
+    toast.error('نام کاربری یا رمز عبور اشتباه است');
+  }
+};
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">

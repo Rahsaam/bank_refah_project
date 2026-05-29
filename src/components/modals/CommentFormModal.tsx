@@ -8,6 +8,7 @@ import {
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { IComment } from "../../types";
+import toast from "react-hot-toast";
 
 interface CommentFormModalProps {
   commentId?: number | null;
@@ -68,8 +69,14 @@ const CommentFormModal = ({ commentId, onClose }: CommentFormModalProps) => {
       return createComment(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success(
+        isEditMode ? "کامنت با موفقیت ویرایش شد" : "کامنت با موفقیت ایجاد شد",
+      );
       onClose();
+    },
+    onError: () => {
+      toast.error("خطا در ذخیره کامنت");
     },
   });
 
@@ -85,7 +92,7 @@ const CommentFormModal = ({ commentId, onClose }: CommentFormModalProps) => {
         </div>
       </div>
     );
-  } 
+  }
 
   return (
     <div

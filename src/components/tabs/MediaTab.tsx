@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import AlbumFormModal from "../modals/AlbumFormModal";
 import PhotoFormModal from "../modals/PhotoFormModal";
 import ImageWithFallback from "../common/ImageWithFallback";
+import { useAuth } from "../../hooks/useAuth";
 
 type SubtabType = "albums" | "photos";
 
@@ -21,6 +22,7 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
   const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [selectedPhotoId, setSelectedPhotoId] = useState<number | null>(null);
+  const { hasPermission } = useAuth();
 
   console.log(searchParams);
 
@@ -126,7 +128,8 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
           }}
           hideCreateButton={true}
           customCreateButton={
-            <button
+            hasPermission("create") &&
+            (<button
               onClick={() => {
                 setSelectedAlbumId(null);
                 setIsAlbumModalOpen(true);
@@ -134,7 +137,7 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
               className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن آلبوم جدید
-            </button>
+            </button>)
           }
         />
       )}
@@ -157,7 +160,8 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
           }}
           hideCreateButton={true}
           customCreateButton={
-            <button
+            hasPermission("create") &&
+            (<button
               onClick={() => {
                 setSelectedPhotoId(null);
                 setIsPhotoModalOpen(true);
@@ -165,7 +169,7 @@ const MediaTab = ({ initialSubtab }: MediaTabProps) => {
               className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن عکس جدید
-            </button>
+            </button>)
           }
         />
       )}

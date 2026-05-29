@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import PostFormModal from "../modals/PostFormModal";
 import { Plus } from "lucide-react";
 import CommentFormModal from "../modals/CommentFormModal";
+import { useAuth } from "../../hooks/useAuth";
 
 type SubtabType = "posts" | "comments";
 
@@ -22,6 +23,7 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
   const [selectedCommentId, setselectedCommentId] = useState<number | null>(null);
   const [isCreateCommentModalOpen, setCreateIsCommentModalOpen] =useState(false);
   const [isCreatePostModalOpen, setCreateIsPostModalOpen] = useState(false);
+  const { hasPermission } = useAuth();
 
   console.log(isCreateCommentModalOpen, isCreatePostModalOpen);
   
@@ -118,7 +120,8 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           }}
           hideCreateButton={true}
           customCreateButton={
-            <button
+            hasPermission("create") &&
+            (<button
               onClick={() => {
                 setSelectedPostId(null);
                 setIsPostModalOpen(true);
@@ -126,7 +129,7 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
               className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن پست جدید
-            </button>
+            </button>)
           }
         />
       )}
@@ -150,7 +153,8 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
           }}
           hideCreateButton={true}
           customCreateButton={
-            <button
+            hasPermission("create") &&
+            (<button
               onClick={() => {
                 setselectedCommentId(null);
                 setIsCommentModalOpen(true);
@@ -158,7 +162,7 @@ const ContentTab = ({ initialSubtab }: ContentTabProps) => {
               className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن کامنت جدید
-            </button>
+            </button>)
           }
         />
       )}

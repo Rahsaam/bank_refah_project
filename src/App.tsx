@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { ProductList, ProductDetails, ProductForm } from "./pages/products";
 import Dashboard from "./pages/dashboard/Dashboard";
 import TabsPage from "./pages/tabs/TabsPage";
@@ -19,6 +20,35 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+            direction: "rtl",
+            fontFamily: "'IRANSans', 'Vazirmatn', sans-serif",
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: "#10b981",
+              secondary: "#fff",
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#fff",
+            },
+          },
+        }}
+      />
+      
       <Routes>
         <Route
           path="/login"

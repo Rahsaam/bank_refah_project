@@ -1,8 +1,8 @@
- import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth";
 import { Pencil, Trash2, Eye } from "lucide-react";
 import type { IGenericCRUDTableProps } from "../../types";
-
+import toast from "react-hot-toast";
 
 const GenericCRUDTable = ({
   title,
@@ -15,7 +15,7 @@ const GenericCRUDTable = ({
   queryKey,
   isLoading,
   //  hideCreateButton = false,
-   customCreateButton, 
+  customCreateButton,
 }: IGenericCRUDTableProps) => {
   const { hasPermission } = useAuth();
   const queryClient = useQueryClient();
@@ -24,6 +24,10 @@ const GenericCRUDTable = ({
     mutationFn: deleteFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
+      toast.success("آیتم با موفقیت حذف شد");
+    },
+    onError: () => {
+      toast.error("خطا در حذف آیتم");
     },
   });
 
@@ -37,14 +41,13 @@ const GenericCRUDTable = ({
     return <div className="text-center p-8">در حال بارگذاری...</div>;
   }
 
+  console.log("data", data);
+  console.log("columns", columns);
 
-  console.log('data', data);
-  console.log('columns', columns);
-  
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="p-4 border-b flex justify-between items-center">
-         <h3 className="text-lg font-bold">{title}</h3>
+        <h3 className="text-lg font-bold">{title}</h3>
         {/* اگه hideCreateButton true باشه، دکمه پیش‌فرض نمایش داده نمیشه */}
         {/* {!hideCreateButton && hasPermission("create") && onCreate && (
           <button
@@ -86,7 +89,7 @@ const GenericCRUDTable = ({
                   <td key={col.key} className="p-3 text-sm">
                     {col.render
                       ? col.render(item[col.key], item)
-                      : item[col.key]} 
+                      : item[col.key]}
                   </td>
                 ))}
                 <td className="p-3">

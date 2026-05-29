@@ -4,6 +4,7 @@ import { fetchPostById, createPost, updatePost } from "../../api/posts";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { IPost } from "../../types";
+import toast from "react-hot-toast";
 
 interface PostFormModalProps {
   postId?: number | null;
@@ -48,7 +49,13 @@ const PostFormModal = ({ postId, onClose }: PostFormModalProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success(
+        isEditMode ? "پست با موفقیت ویرایش شد" : "پست با موفقیت ایجاد شد",
+      );
       onClose();
+    },
+    onError: () => {
+      toast.error("خطا در ذخیره پست");
     },
   });
 

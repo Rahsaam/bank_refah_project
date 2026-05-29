@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import TodoFormModal from "../modals/TodoFormModal";
 import UserFormModal from "../modals/UserFormModal";
+import { useAuth } from "../../hooks/useAuth";
+
 
 type SubtabType = "todos" | "users";
 
@@ -20,6 +22,7 @@ const ManagementTab = ({ initialSubtab }: ManagementTabProps) => {
   const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const { hasPermission } = useAuth();
   
 
   const activeSubtab: SubtabType =
@@ -116,7 +119,8 @@ const ManagementTab = ({ initialSubtab }: ManagementTabProps) => {
           }}
           hideCreateButton={true}
           customCreateButton={
-            <button
+            hasPermission("create") &&
+            (<button
               onClick={() => {
                 setSelectedTodoId(null);
                 setIsTodoModalOpen(true);
@@ -124,7 +128,7 @@ const ManagementTab = ({ initialSubtab }: ManagementTabProps) => {
               className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن کار روزمره جدید
-            </button>
+            </button>)
           }
         />
       )}
@@ -147,7 +151,8 @@ const ManagementTab = ({ initialSubtab }: ManagementTabProps) => {
           }}
           hideCreateButton={true}
           customCreateButton={
-            <button
+            hasPermission("create") &&
+            (<button
               onClick={() => {
                 setSelectedUserId(null);
                 setIsUserModalOpen(true);
@@ -155,7 +160,7 @@ const ManagementTab = ({ initialSubtab }: ManagementTabProps) => {
               className="bg-blue-500 text-white px-3 rounded-lg sm:text-sm flex items-center gap-1 sm:py-1 py-2 text-xs hover:bg-blue-600"
             >
               <Plus size={16} /> افزودن کاربر جدید
-            </button>
+            </button>)
           }
         />
       )}

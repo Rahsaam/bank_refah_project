@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import type { ITodo } from "../../types";
+import toast from "react-hot-toast";
 
 interface TodoFormModalProps {
   todoId?: number | null;
@@ -62,8 +63,14 @@ const TodoFormModal = ({ todoId, onClose }: TodoFormModalProps) => {
       return createTodo(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success(
+        isEditMode ? "کار روزمره با موفقیت ویرایش شد" : "کار روزمره با موفقیت ایجاد شد",
+      );
       onClose();
+    },
+    onError: () => {
+      toast.error("خطا در ذخیره کار روزمره");
     },
   });
 
