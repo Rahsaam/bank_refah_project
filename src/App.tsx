@@ -8,6 +8,7 @@ import type { JSX } from "react";
 import LoginPage from "./pages/login/LoginPage";
 import Layout from "./components/layout/Layout";
 import EditProductWrapper from "./components/common/EditProductWrapper";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -48,7 +50,7 @@ function App() {
           },
         }}
       />
-      
+
       <Routes>
         <Route
           path="/login"
