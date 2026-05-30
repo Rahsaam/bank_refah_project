@@ -1,12 +1,46 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Calendar as CalendarIcon, ChevronRight, ChevronLeft } from 'lucide-react';
+import moment from 'moment-jalaali';
+
+
+moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 interface PersianDatePickerProps {
-  value: string; // فرمت: YYYY/MM/DD
-  onChange: (value: string) => void;
+  value: string; 
+  onChange: (value: string) => void; 
   placeholder?: string;
   error?: string;
 }
+
+const gregorianToJalali = (date: string): { year: number; month: number; day: number } => {
+  const m = moment(date);
+  if (!m.isValid()) {
+    const now = moment();
+    return { year: now.jYear(), month: now.jMonth() + 1, day: now.jDate() };
+  }
+  return {
+    year: m.jYear(),
+    month: m.jMonth() + 1,
+    day: m.jDate(),
+  };
+};
+
+
+const jalaliToGregorian = (year: number, month: number, day: number): string => {
+  const m = moment(`${year}/${month}/${day}`, 'jYYYY/jMM/jDD');
+  return m.format('YYYY-MM-DD');
+};
+
+
+const getTodayJalali = (): { year: number; month: number; day: number } => {
+  const now = moment();
+  return {
+    year: now.jYear(),
+    month: now.jMonth() + 1,
+    day: now.jDate(),
+  };
+};
 
 const months = [
   "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
@@ -15,74 +49,51 @@ const months = [
 
 const weekDays = ["ش", "ی", "د", "س", "چ", "پ", "ج"];
 
-const toPersianDigits = (str: string | number) => {
+const toPersianDigits = (str: string | number): string => {
   return String(str).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]);
 };
 
-// تبدیل تاریخ جلالی به میلادی
-const jalaliToGregorian = (jY: number, jM: number, jD: number): Date => {
-  const jy = jY - 979;
-  const jm = jM - 1;
-  const jd = jD - 1;
+const getJalaliMonthDays = (year: number, month: number): number => {
+  if (month <= 6) return 31;
+  if (month <= 11) return 30;
 
-  let jDayNo = 365 * jy + Math.floor(jy / 33) * 8 + Math.floor(((jy % 33) + 3) / 4);
-  for (let i = 0; i < jm; ++i) {
-    jDayNo += i < 6 ? 31 : 30;
-  }
-  jDayNo += jd;
+  const isLeap = moment(`${year}/12/01`, 'jYYYY/jMM/jDD').isLeapYear();
+  return isLeap ? 30 : 29;
+};
 
-  let gDayNo = jDayNo + 79;
-  const gy = 1600 + 400 * Math.floor(gDayNo / 146097);
-  gDayNo %= 146097;
+const getFirstDayOfJalaliMonth = (year: number, month: number): number => {
 
-  let leap = 1;
-  if (gDayNo >= 36525) {
-    gDayNo--;
-    gDayNo %= 36524;
-    if (gDayNo >= 365) {
-      gDayNo++;
-    } else {
-      leap = 0;
-    }
-  }
-
-  const gd = gDayNo;
-  const g_days_in_months = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const m = moment(`${year}/${month}/01`, 'jYYYY/jMM/jDD');
+  const dayOfWeek = m.day(); 
   
-  let gm = 0;
-  let totalGDays = 0;
-  while (gm < 12 && gd >= totalGDays + g_days_in_months[gm]) {
-    totalGDays += g_days_in_months[gm];
-    gm++;
-  }
-  const day = gd - totalGDays + 1;
 
-  return new Date(gy, gm, day);
+  return (dayOfWeek + 1) % 7;
 };
 
-const isLeapJalali = (year: number): boolean => {
-  const matches = [1, 5, 9, 13, 17, 22, 26, 30];
-  return matches.includes(year % 33);
-};
-
-export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
+const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
   value,
   onChange,
   placeholder = 'انتخاب تاریخ انقضا',
   error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
-  // دریافت تاریخ امروز به عنوان مبنای مقایسه
-  const todayJson = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
-    year: 'numeric', month: 'numeric', day: 'numeric'
-  }).format(new Date());
-  const [tY, tM, tD] = todayJson.split('/').map(Number);
-
-  const [currentYear, setCurrentYear] = useState(tY);
-  const [currentMonth, setCurrentMonth] = useState(tM);
-
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+
+  const todayJalali = getTodayJalali();
+
+
+  const getCurrentYearMonth = () => {
+    if (value && value.trim()) {
+      const jalali = gregorianToJalali(value);
+      return { year: jalali.year, month: jalali.month };
+    }
+    return { year: todayJalali.year, month: todayJalali.month };
+  };
+
+  const [currentYear, setCurrentYear] = useState(getCurrentYearMonth().year);
+  const [currentMonth, setCurrentMonth] = useState(getCurrentYearMonth().month);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -94,39 +105,26 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+
   useEffect(() => {
-    if (value && value.includes('/')) {
-      const [y, m] = value.split('/').map(Number);
-      if (!isNaN(y) && !isNaN(m)) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setCurrentYear(y);
-        setCurrentMonth(m);
-      }
+    if (value && value.trim()) {
+      const jalali = gregorianToJalali(value);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCurrentYear(jalali.year);
+      setCurrentMonth(jalali.month);
     }
   }, [value]);
 
-  const getMonthDetails = (year: number, month: number) => {
-    let totalDays = 30;
-    if (month <= 6) totalDays = 31;
-    else if (month === 12) totalDays = isLeapJalali(year) ? 30 : 29;
-
-    const firstDayGregorian = jalaliToGregorian(year, month, 1);
-    const dayOfWeek = firstDayGregorian.getDay();
-    const startDayIndex = (dayOfWeek + 1) % 7;
-
-    return { totalDays, startDayIndex };
-  };
-
-  const { totalDays, startDayIndex } = getMonthDetails(currentYear, currentMonth);
+  const totalDays = getJalaliMonthDays(currentYear, currentMonth);
+  const startDayIndex = getFirstDayOfJalaliMonth(currentYear, currentMonth);
 
   const blankDays = Array(startDayIndex).fill(null);
   const monthDays = Array.from({ length: totalDays }, (_, i) => i + 1);
   const allCalendarSlots = [...blankDays, ...monthDays];
 
   const handleSelectDay = (day: number) => {
-    const formattedMonth = currentMonth.toString().padStart(2, '0');
-    const formattedDay = day.toString().padStart(2, '0');
-    onChange(`${currentYear}/${formattedMonth}/${formattedDay}`);
+    const gregorianDate = jalaliToGregorian(currentYear, currentMonth, day);
+    onChange(gregorianDate);
     setIsOpen(false);
   };
 
@@ -148,28 +146,30 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
     }
   };
 
-  const isSelected = (day: number) => {
+  const isSelected = (day: number): boolean => {
     if (!value) return false;
-    const [y, m, d] = value.split('/').map(Number);
-    return y === currentYear && m === currentMonth && d === day;
+    const jalali = gregorianToJalali(value);
+    return jalali.year === currentYear && jalali.month === currentMonth && jalali.day === day;
   };
 
-  // تابع بررسی اینکه آیا این روز در گذشته قرار دارد یا خیر
-  const isPastDay = (day: number) => {
-    if (currentYear < tY) return true;
-    if (currentYear > tY) return false;
-    
-    // اگر سال مساوی بود، ماه را بررسی می‌کنیم
-    if (currentMonth < tM) return true;
-    if (currentMonth > tM) return false;
-    
-    // اگر سال و ماه مساوی بود، روز را بررسی می‌کنیم
-    return day < tD;
+  const isPastDay = (day: number): boolean => {
+    if (currentYear < todayJalali.year) return true;
+    if (currentYear > todayJalali.year) return false;
+    if (currentMonth < todayJalali.month) return true;
+    if (currentMonth > todayJalali.month) return false;
+    return day < todayJalali.day;
+  };
+
+
+  const displayValue = (): string => {
+    if (!value) return '';
+    const jalali = gregorianToJalali(value);
+    return `${jalali.year}/${String(jalali.month).padStart(2, '0')}/${String(jalali.day).padStart(2, '0')}`;
   };
 
   return (
     <div className="relative w-full" dir="rtl" ref={wrapperRef}>
-     <p className='text-gray-700 mb-2'>تاریخ انقضا *</p>
+      <p className="text-gray-700 mb-2">تاریخ انقضا *</p>
       <div
         className={`w-full p-2 border rounded-lg cursor-pointer bg-white flex items-center justify-between select-none transition-colors ${
           error ? 'border-red-500 bg-red-50/10' : 'border-gray-300 hover:border-gray-400'
@@ -177,13 +177,13 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className={value ? 'text-gray-900 font-medium' : 'text-gray-400'}>
-          {value ? toPersianDigits(value) : placeholder}
+          {value ? toPersianDigits(displayValue()) : placeholder}
         </span>
         <CalendarIcon size={18} className="text-gray-400" />
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 p-4 w-75 select-none animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute z-50 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 p-4 w-75 select-none">
           <div className="flex items-center justify-between mb-4">
             <button type="button" onClick={prevMonth} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
               <ChevronRight size={18} className="text-gray-600" />
@@ -207,11 +207,11 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
           <div className="grid grid-cols-7 gap-1 text-center">
             {allCalendarSlots.map((day, index) => {
               if (day === null) {
-                return <div key={`blank-${index}`} />;
+                return <div key={`blank-${index}`} className="h-8 w-8" />;
               }
 
               const selected = isSelected(day);
-              const isTodayDay = tY === currentYear && tM === currentMonth && tD === day;
+              const isToday = todayJalali.year === currentYear && todayJalali.month === currentMonth && todayJalali.day === day;
               const disabled = isPastDay(day);
 
               return (
@@ -225,7 +225,7 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
                       ? 'text-gray-300 bg-gray-50 cursor-not-allowed line-through'
                       : selected
                       ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-200'
-                      : isTodayDay
+                      : isToday
                       ? 'border border-blue-500 text-blue-600 font-semibold'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
@@ -244,3 +244,4 @@ export const PersianDatePicker: React.FC<PersianDatePickerProps> = ({
 };
 
 export default PersianDatePicker;
+
