@@ -30,7 +30,7 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
     setValue,
     control,
   } = useForm<ProductFormData>({
-    // @ts-expect-error یا مطمئن شو که در productSchema فیلد image تعریف شده است
+    // @ts-expect-error مطمئن شو که در productSchema فیلد image تعریف شده است
     resolver: yupResolver(productSchema),
     values: initialData,
     defaultValues: {
@@ -103,16 +103,14 @@ const ProductForm = ({ initialData, isEditMode = false }: ProductFormProps) => {
               error={errors.discount}
             />
 
-            {/* <div className="md:col-span-2"> */}
             <PersianDatePicker
               value={expiryDateValue || ""}
               onChange={(date) =>
                 setValue("expiryDate", date, { shouldValidate: true })
               }
               error={errors.expiryDate?.message}
-              placeholder="مثال: ۱۴۰۳/۱۲/۲۵"
+              placeholder="انتخاب تاریخ انقضا محصول"
             />
-            {/* </div> */}
 
             <FormSelect
               label="دسته‌بندی"

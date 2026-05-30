@@ -6,7 +6,7 @@ export const mockProducts: IProduct[] = [
     title: 'لپ‌تاپ ایسوس ROG',
     price: 45000000,
     discount: 10,
-    expiryDate: '1404/12/01',
+    expiryDate: '2026-02-20',
     category: 'electronics',
     image: 'https://picsum.photos/id/0/200/200',
     description: 'لپ‌تاپ گیمینگ با پردازنده Intel Core i9 و رم 32GB'
@@ -16,7 +16,7 @@ export const mockProducts: IProduct[] = [
     title: 'کیف چرم زنانه',
     price: 3500000,
     discount: 20,
-    expiryDate: '1404/10/15',
+    expiryDate: '2026-01-05',
     category: 'clothing',
     image: 'https://picsum.photos/id/1/200/200',
     description: 'کیف چرم طبیعی با طرح کلاسیک'
@@ -26,7 +26,7 @@ export const mockProducts: IProduct[] = [
     title: 'قهوه ترک 500 گرمی',
     price: 450000,
     discount: 5,
-    expiryDate: '1404/08/20',
+    expiryDate: '2025-11-10',
     category: 'food',
     image: 'https://picsum.photos/id/2/200/200',
     description: 'قهوه ترک درجه یک از شمال ایران'
@@ -36,7 +36,7 @@ export const mockProducts: IProduct[] = [
     title: 'یخچال ساید بای ساید',
     price: 85000000,
     discount: 15,
-    expiryDate: '1404/12/30',
+    expiryDate: '2025/10/7',
     category: 'home',
     image: 'https://picsum.photos/id/3/200/200',
     description: 'یخچال 800 لیتری با قابلیت هوشمند'
@@ -46,7 +46,7 @@ export const mockProducts: IProduct[] = [
     title: 'کتاب هنر جنگ سان تزو',
     price: 89000,
     discount: 0,
-    expiryDate: '1405/01/01',
+    expiryDate: '2026/2/18',
     category: 'books',
     image: 'https://picsum.photos/id/4/200/200',
     description: 'کتاب معروف استراتژی و رهبری'
@@ -56,7 +56,7 @@ export const mockProducts: IProduct[] = [
     title: 'هدفون بیس بی سیم',
     price: 2850000,
     discount: 25,
-    expiryDate: '1404/09/15',
+    expiryDate: '2027/1/2',
     category: 'electronics',
     image: 'https://picsum.photos/id/5/200/200',
     description: 'هدفون نویز کنسلینگ با 40 ساعت شارژدهی'

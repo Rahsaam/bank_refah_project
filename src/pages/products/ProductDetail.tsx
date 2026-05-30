@@ -5,6 +5,7 @@ import { ArrowLeft, Pencil } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { persianCategory } from "../../utils/persianCategory";
 import ImageWithFallback from "../../components/common/ImageWithFallback";
+import moment from "moment-jalaali"; 
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -20,6 +21,11 @@ const ProductDetails = () => {
     return <div className="text-center p-8 text-red-500">محصول یافت نشد</div>;
 
   const finalPrice = product.price * (1 - product.discount / 100);
+
+
+  const persianExpiryDate = product.expiryDate 
+    ? moment(product.expiryDate).format("jYYYY/jMM/jDD") 
+    : "بدون تاریخ";
 
   return (
     <div className="container mx-auto p-4" dir="rtl">
@@ -68,7 +74,8 @@ const ProductDetails = () => {
               )}
               <div>
                 <span className="font-bold">تاریخ انقضا:</span>{" "}
-                {product.expiryDate}
+                {/* نمایش تاریخ شمسی شده */}
+                <span className="tracking-wide">{persianExpiryDate}</span>
               </div>
             </div>
 
